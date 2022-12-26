@@ -1,0 +1,23 @@
+{
+  "name": "sudoku",
+  "version": "1.0.0",
+  "description": "sudoku for my brother",
+  "main": "app.js",
+  "author": "tomek7667",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start:watch": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pug": "^3.0.2",
+    "sqlite3": "^5.1.4"
+  }
+}
