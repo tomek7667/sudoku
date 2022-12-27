@@ -1,11 +1,16 @@
 import express from "express";
-import { __express as pug } from "pug";
-import { db, login } from "./db.js";
-import { usersRouter } from "./routers/users.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import { __express as pug } from "pug";
+import { getUser } from "./db.js";
+import { usersRouter } from "./routers/users.js";
+import { sudokusRouter } from "./routers/sudoku.js";
+dotenv.config();
 
 const port = 3000;
 const app = express();
+app.use(cookieParser());
 export const Sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 app.engine("pug", pug);
@@ -14,30 +19,60 @@ app.set("view engine", "pug");
 app.set("views", "templates");
 app.use(express.static("public"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/users", usersRouter);
-
-const authorization = (req, res, next) => {
+const serializeUser = async (req, res, next) => {
 	try {
-		const auth = req.headers.authorization;
-		if (!auth) {
-			throw new Error("No authorization header");
-		}
-		const [type, token] = auth.split(" ");
-		if (type !== "Bearer") {
-			throw new Error("Invalid authorization type");
-		}
-		req.token = token;
-		next();
+		const { token } = req.cookies;
+		const id = jwt.verify(token, process.env.JWT_SECRET);
+		req.user = await getUser(id);
+		return next();
 	} catch (e) {
-		res.status(401).send(e.message);
+		return next();
 	}
 };
 
-app.get("/*", (req, res) => {
-	res.render("index");
+app.use(serializeUser);
+
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/sudokus", sudokusRouter);
+
+app.get("/login", (req, res) => {
+	const { user } = req;
+	if (user) {
+		return res.redirect("/");
+	} else {
+		return res.render("login");
+	}
 });
 
-app.listen(port, async () => {
+app.get("/profile", (req, res) => {
+	const { user } = req;
+	if (user) {
+		return res.render("user", { user: user.toJSON() });
+	} else {
+		return res.redirect("/login");
+	}
+});
+
+app.get("/logout", (req, res) => {
+	res.clearCookie("token");
+	return res.redirect("/");
+});
+
+app.get("/error", (req, res) => {
+	const { user } = req;
+	return res.render("error", {
+		message: req.query.message,
+		user: user?.toJSON(),
+	});
+});
+
+app.get("/", (req, res) => {
+	const { user } = req;
+	return res.render("index", { user: user?.toJSON() });
+});
+
+app.listen(port, () => {
 	console.log(`Example app listening at http://localhost:${port}`);
 });

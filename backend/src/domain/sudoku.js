@@ -1,90 +1,152 @@
+import { randomUUID } from "crypto";
+import S from "sudoku";
+import gen from "random-seed";
+const shuffleRounds = 0xffff;
+
+const puzzleToBoard = (puzzle) => {
+	const board = [];
+	for (let i = 0; i < 9; i++) {
+		board.push(puzzle.slice(i * 9, (i + 1) * 9));
+		board[i] = board[i].map((cell) => (cell === null ? 0 : cell + 1));
+	}
+	return board;
+};
+
+const boardToPuzzle = (board) => {
+	const puzzle = [];
+	for (let i = 0; i < 9; i++) {
+		puzzle.push(...board[i].map((cell) => (cell === 0 ? null : cell - 1)));
+	}
+	return puzzle;
+};
+
 function generateSudokuBoard() {
-	// Create an empty board
-	let board = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	];
-
-	// Fill in the board using backtracking
-	if (fillBoard(board, 0, 0)) {
-		return board;
-	} else {
-		// If the board cannot be filled, return an empty board
-		return [[]];
-	}
-}
-
-// Recursive function to fill in the board
-function fillBoard(board, row, col) {
-	// If we have reached the end of the column, move to the next row
-	if (col === 9) {
-		col = 0;
-		row++;
-	}
-
-	// If we have reached the end of the board, the board is complete
-	if (row === 9) {
-		return true;
-	}
-
-	// Skip cells that are already filled in
-	if (board[row][col] !== 0) {
-		return fillBoard(board, row, col + 1);
-	}
-
-	// Try filling in a number for the current cell
-	for (let num = 1; num <= 9; num++) {
-		if (isValid(board, row, col, num)) {
-			// If the number is valid, fill in the cell and move to the next one
-			board[row][col] = num;
-			if (fillBoard(board, row, col + 1)) {
-				return true;
-			}
-			// If the board cannot be filled, reset the cell and try the next number
-			board[row][col] = 0;
-		}
-	}
-
-	// If no number can be placed in the cell, return false
-	return false;
+	console.log("Generating Sudoku board...");
+	const puzzle = S.makepuzzle();
+	// const solved = S.solvepuzzle(puzzle);
+	const board = puzzleToBoard(puzzle);
+	return board;
 }
 
 function isValid(board, row, col, num) {
-	// Check if the number appears in the current row
+	// Check if the number is already in the row
 	for (let i = 0; i < 9; i++) {
 		if (board[row][i] === num) {
 			return false;
 		}
 	}
 
-	// Check if the number appears in the current column
+	// Check if the number is already in the column
 	for (let i = 0; i < 9; i++) {
 		if (board[i][col] === num) {
 			return false;
 		}
 	}
 
-	// Check if the number appears in the current 3x3 box
-	let startRow = Math.floor(row / 3) * 3;
-	let startCol = Math.floor(col / 3) * 3;
-	for (let i = startRow; i < startRow + 3; i++) {
-		for (let j = startCol; j < startCol + 3; j++) {
-			if (board[i][j] === num) {
+	// Check if the number is already in the 3x3 box
+	let boxRow = Math.floor(row / 3) * 3;
+	let boxCol = Math.floor(col / 3) * 3;
+	for (let i = 0; i < 3; i++) {
+		for (let j = 0; j < 3; j++) {
+			if (board[boxRow + i][boxCol + j] === num) {
 				return false;
 			}
 		}
 	}
 
-	// If the number does not appear in the current row, column, or box, it is valid
+	// If the number is not in the row, column, or box, it is valid
 	return true;
 }
 
-let board = generateSudokuBoard();
-console.log(board);
+const nameParts = [
+	"la",
+	"we",
+	"ri",
+	"re",
+	"mi",
+	"fa",
+	"so",
+	"por",
+	"koo",
+	"le",
+	"ko",
+	"ma",
+	"ha",
+	"ho",
+	"dra",
+	"po",
+	"bo",
+	"za",
+	"ru",
+	"ta",
+	"na",
+	"da",
+	"pa",
+	"sa",
+	"ka",
+	"ba",
+	"le",
+	"lo",
+	"mo",
+];
+
+const generateName = (id) => {
+	let name = "";
+	let rand = gen.create(id);
+	for (let i = 0; i < 5; i++) {
+		name += nameParts[Math.floor(rand.random() * nameParts.length)];
+	}
+	return name;
+};
+
+export class Sudoku {
+	constructor({ id, board, createdAt, name }) {
+		this.id = id;
+		this.board = board;
+		this.createdAt = createdAt;
+		this.name = name;
+		this.solution = puzzleToBoard(S.solvepuzzle(boardToPuzzle(board)));
+	}
+
+	static async create() {
+		const id = randomUUID();
+		const name = generateName(id);
+		return new Sudoku({
+			id,
+			board: generateSudokuBoard(),
+			createdAt: new Date(),
+			name,
+		});
+	}
+
+	toJSON() {
+		return {
+			id: this.id,
+			board: this.board,
+			createdAt: this.createdAt.toLocaleString(),
+			name: this.name,
+		};
+	}
+
+	isCorrectOrIndex(trial) {
+		let wrong = [];
+		let success = true;
+		for (let i = 0; i < 9; i++) {
+			for (let j = 0; j < 9; j++) {
+				if (trial[i][j] !== this.solution[i][j]) {
+					wrong.push({ i, j });
+					success = false;
+				}
+			}
+		}
+		return { success, wrong };
+	}
+
+	isComplete() {
+		return this.board.every((row) => row.every((cell) => cell !== 0));
+	}
+
+	applyState(board) {
+		this.board = board;
+	}
+}

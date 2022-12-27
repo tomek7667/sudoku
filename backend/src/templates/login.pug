@@ -1,0 +1,10 @@
+include ./common/header.pug
+h1 login / register
+form(action="/api/v1/users/authenticate" method="post")
+  input(type="text" name="username" id="username" placeholder="login")
+  br
+  input(type="password" name="password" id="password" placeholder="password")
+  br
+  input(type="submit")
+  br
+  a(href="/") back

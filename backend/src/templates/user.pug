@@ -1,0 +1,12 @@
+include common/header.pug
+h1 user profile 
+script(src="profile.js")
+form(action="/api/v1/users/profile" method="put" id="updateUserForm")
+  input(type="text" name="name" id="name" placeholder="login" value=user.name)
+  br
+  input(type="password" name="password" id="password" placeholder="password")
+  br
+  input(type="submit" value="update")
+  br
+p Account created at #{user.createdAt}
+a(href="/") back

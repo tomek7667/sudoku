@@ -1,0 +1,51 @@
+.sudokuBox {
+    width: 500px;
+    height: 500px;
+    border-radius: 5px;
+    border-collapse: collapse;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 5px;
+    /* Spacing */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row {
+    height: 50px;
+    width: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 5px;
+
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    border-collapse: collapse;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #c1c1c1;
+    color: #000;
+    margin-right: 5px;
+}
+
+.cell::-webkit-scrollbar {
+    display: none;
+}
+
+.highlightCell {
+    box-shadow: 0 0 5px 1px yellow;
+}

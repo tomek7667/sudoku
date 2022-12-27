@@ -1,3 +1,15 @@
-include header.pug
+include common/header.pug
 h1 sudokus
+
+include sudoku.pug
+
+if (user)
+    a(href="/profile") user profile
+    br
+    span logged in as 
+    b #{user.name}
+    br
+    a(href="/logout") logout
+else
+    a(href="/login") login / register
 script(src="script.js")

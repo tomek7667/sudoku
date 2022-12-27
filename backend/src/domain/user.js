@@ -16,11 +16,20 @@ export class User {
 		return new User({ id, name, hash, created_at: new Date() });
 	}
 
+	async update({ name, password }) {
+		if (name) {
+			this.name = name;
+		}
+		if (password) {
+			this.hash = await bcrypt.hash(password, saltRounds);
+		}
+	}
+
 	toJSON() {
 		return {
 			id: this.id,
 			name: this.name,
-			createdAt: this.createdAt,
+			createdAt: this.createdAt.toLocaleString(),
 		};
 	}
 }

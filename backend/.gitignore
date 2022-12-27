@@ -1,3 +1,4 @@
 src/node_modules/
 src/yarn.lock
 src/db.sqlite
+src/.env
