@@ -42,10 +42,32 @@
     margin-right: 5px;
 }
 
+.preDefinedCell {
+    color: gray;
+}
+
 .cell::-webkit-scrollbar {
     display: none;
 }
 
 .highlightCell {
-    box-shadow: 0 0 5px 1px yellow;
+    border: 1px solid #f00;
+}
+
+.win {
+    box-shadow: 0 0 5px 1px green;
+}
+
+.lose {
+    box-shadow: 0 0 5px 1px red;
+}
+
+.fireworkBox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
 }

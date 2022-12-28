@@ -1,8 +1,15 @@
 link(rel="stylesheet", href="sudoku.css")
-script(src="sudoku.js")
+link(rel="stylesheet", href="firework.css")
+script(src="sudoku.js" defer)
+script(src="firework.js" defer)
+script(src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js" defer)
+canvas(id="fireworkBox" class="fireworkBox")
 p(id="sudokuName")
-p(id="checkResult")
+div(id="checkResult") Try to solve the puzzle!
+br
 div(id="sudokuBox" class="sudokuBox")
 button(id="refreshButton") New Sudoku
 button(id="solveButton") Solve
+if (user)
+  button(id="saveButton" onclick="saveSudokuState()") Save
 br

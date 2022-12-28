@@ -1,0 +1,8 @@
+include common/header.pug
+script(src="sudokus/solved.js" defer)
+link(rel="stylesheet", href="sudokus/sudokus.css")
+h1 solved
+p here you can see all the sudokus you have solved - #{user.stars}
+ul(id="sudokus")
+button(id="loadMore") Load more
+a(href="/") back

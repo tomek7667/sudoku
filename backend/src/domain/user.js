@@ -3,11 +3,12 @@ import { randomUUID } from "crypto";
 const saltRounds = 0xd;
 
 export class User {
-	constructor({ id, name, hash, created_at }) {
+	constructor({ id, name, hash, created_at, stars }) {
 		this.id = id;
 		this.name = name;
 		this.hash = hash;
 		this.createdAt = created_at;
+		this.stars = stars;
 	}
 
 	static async create({ name, password }) {
@@ -30,6 +31,7 @@ export class User {
 			id: this.id,
 			name: this.name,
 			createdAt: this.createdAt.toLocaleString(),
+			stars: this.stars,
 		};
 	}
 }

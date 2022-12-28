@@ -3,11 +3,16 @@ h1 sudokus
 
 include sudoku.pug
 
+a(href="/browse") browse
 if (user)
-    a(href="/profile") user profile
+    a(href="/solved") solved
+    a(href="/in-progress") in progress
+    a(href="/profile") profile
     br
     span logged in as 
     b #{user.name}
+    span &nbsp;stars:
+    b &nbsp;#{user.stars}
     br
     a(href="/logout") logout
 else

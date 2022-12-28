@@ -24,3 +24,11 @@ button, input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #aaa;
 }
+
+button:hover {
+    background-color: #aaa;
+}
+
+a {
+    margin-right: 5px;
+}

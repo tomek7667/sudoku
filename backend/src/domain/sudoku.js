@@ -6,8 +6,12 @@ const shuffleRounds = 0xffff;
 const puzzleToBoard = (puzzle) => {
 	const board = [];
 	for (let i = 0; i < 9; i++) {
-		board.push(puzzle.slice(i * 9, (i + 1) * 9));
-		board[i] = board[i].map((cell) => (cell === null ? 0 : cell + 1));
+		const row = [];
+		for (let j = 0; j < 9; j++) {
+			const cell = puzzle[i * 9 + j];
+			row.push(cell === null ? 0 : cell + 1);
+		}
+		board.push(row);
 	}
 	return board;
 };
@@ -15,47 +19,18 @@ const puzzleToBoard = (puzzle) => {
 const boardToPuzzle = (board) => {
 	const puzzle = [];
 	for (let i = 0; i < 9; i++) {
-		puzzle.push(...board[i].map((cell) => (cell === 0 ? null : cell - 1)));
+		for (let j = 0; j < 9; j++) {
+			const cell = board[i][j];
+			puzzle.push(cell === 0 ? null : cell - 1);
+		}
 	}
 	return puzzle;
 };
 
 function generateSudokuBoard() {
-	console.log("Generating Sudoku board...");
 	const puzzle = S.makepuzzle();
-	// const solved = S.solvepuzzle(puzzle);
 	const board = puzzleToBoard(puzzle);
 	return board;
-}
-
-function isValid(board, row, col, num) {
-	// Check if the number is already in the row
-	for (let i = 0; i < 9; i++) {
-		if (board[row][i] === num) {
-			return false;
-		}
-	}
-
-	// Check if the number is already in the column
-	for (let i = 0; i < 9; i++) {
-		if (board[i][col] === num) {
-			return false;
-		}
-	}
-
-	// Check if the number is already in the 3x3 box
-	let boxRow = Math.floor(row / 3) * 3;
-	let boxCol = Math.floor(col / 3) * 3;
-	for (let i = 0; i < 3; i++) {
-		for (let j = 0; j < 3; j++) {
-			if (board[boxRow + i][boxCol + j] === num) {
-				return false;
-			}
-		}
-	}
-
-	// If the number is not in the row, column, or box, it is valid
-	return true;
 }
 
 const nameParts = [
@@ -97,6 +72,27 @@ const generateName = (id) => {
 		name += nameParts[Math.floor(rand.random() * nameParts.length)];
 	}
 	return name;
+};
+
+export const getEmptyBoard = () => {
+	const board = [];
+	for (let i = 0; i < 9 ** 2; i++) {
+		board.push({ i: Math.floor(i / 9), j: i % 9, value: 0 });
+	}
+	return board;
+};
+
+export const deserializeBoard = (board) => {
+	if (!board || board.length !== 9) {
+		return getEmptyBoard();
+	}
+	const newBoard = [];
+	for (let i = 0; i < 9; i++) {
+		for (let j = 0; j < 9; j++) {
+			newBoard.push({ i, j, value: board[i][j] });
+		}
+	}
+	return newBoard;
 };
 
 export class Sudoku {

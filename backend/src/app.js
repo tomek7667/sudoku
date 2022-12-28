@@ -68,6 +68,23 @@ app.get("/error", (req, res) => {
 	});
 });
 
+app.get("/browse", (req, res) => {
+	const { user } = req;
+	return res.render("sudokus", { user: user?.toJSON() });
+});
+
+app.get("/solved", (req, res) => {
+	const { user } = req;
+	if (!user) return res.redirect("/login");
+	return res.render("solved", { user: user?.toJSON() });
+});
+
+app.get("/in-progress", (req, res) => {
+	const { user } = req;
+	if (!user) return res.redirect("/login");
+	return res.render("in-progress", { user: user?.toJSON() });
+});
+
 app.get("/", (req, res) => {
 	const { user } = req;
 	return res.render("index", { user: user?.toJSON() });

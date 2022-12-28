@@ -8,10 +8,9 @@ const refreshSudoku = (ms) => {
 };
 
 const removeHighlight = () => {
-	const cells = document.getElementsByClassName("highlightCell");
-	for (let i = 0; i < cells.length; i++) {
-		cells[i].classList.remove("highlightCell");
-	}
+	document
+		.querySelectorAll(".highlightCell")
+		.forEach((cell) => cell.classList.remove("highlightCell"));
 };
 
 const checkSudoku = async () => {
@@ -29,18 +28,42 @@ const checkSudoku = async () => {
 		body: JSON.stringify({ board }),
 	});
 	const checkResponse = await response.json();
-
+	const result = document.getElementById("checkResult");
 	if (checkResponse.success) {
-		document.getElementById("checkResult").innerText =
-			"Congratulations! You solved the sudoku!";
+		result.classList.remove("lose");
+		result.classList.add("win");
+		result.innerText = "Congratulations! You solved the sudoku!";
+		displayFireworks();
 	} else {
 		removeHighlight();
+		result.classList.remove("win");
+		result.classList.add("lose");
+		result.innerText =
+			"Sorry, you didn't solve the sudoku correctly. Wrong cells were highlighted.";
 		checkResponse.wrong.map(({ i, j }) => {
 			const cell = document.getElementById("cellInput-" + i + "-" + j);
 			cell.classList.add("highlightCell");
 		});
+	}
+};
+
+const saveSudokuState = async () => {
+	const board = boardElements.map((row) => {
+		return row.map((cell) => {
+			return isNaN(parseInt(cell.value)) ? 0 : parseInt(cell.value);
+		});
+	});
+	const response = await fetch("/api/v1/sudokus", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			cookie: document.cookie,
+		},
+		body: JSON.stringify({ board }),
+	});
+	if (response.status === 200) {
 		document.getElementById("checkResult").innerText =
-			"Sorry, you didn't solve the sudoku correctly. Wrong cells were highlighted.";
+			"Sudoku state saved successfully!";
 	}
 };
 
@@ -51,7 +74,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 	const response = await fetch("/api/v1/sudokus");
 	const fetchedSudoku = await response.json();
 	if (fetchedSudoku.success) {
-		const { name, board } = fetchedSudoku.data;
+		const { name, board } = fetchedSudoku.data.sudoku;
+		const { state } = fetchedSudoku.data;
 		document.getElementById(
 			"sudokuName"
 		).innerText = `Sudoku name: ${name}`;
@@ -67,14 +91,20 @@ window.addEventListener("DOMContentLoaded", async () => {
 				cellInput.classList.add("cell");
 				cellInput.min = 1;
 				cellInput.max = 9;
-				cellInput.value = cell === 0 ? "" : cell;
+				cellInput.disabled = cell !== 0;
+				if (cell !== 0) cellInput.classList.add("preDefinedCell");
+				cellInput.value = cell !== 0 ? cell : "";
 				rowDiv.appendChild(cellInput);
-
 				boardElements[i] = [...boardElements[i], cellInput];
 				j++;
 			});
 			i++;
 			sudokuBox.appendChild(rowDiv);
+		});
+		state.forEach(({ i, j, value }) => {
+			if (value !== 0 && boardElements[i][j].value === "") {
+				boardElements[i][j].value = value;
+			}
 		});
 	} else {
 		document.getElementById(
