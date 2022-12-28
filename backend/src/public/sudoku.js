@@ -39,10 +39,14 @@ const checkSudoku = async () => {
 		result.classList.remove("win");
 		result.classList.add("lose");
 		result.innerText =
-			"Sorry, you didn't solve the sudoku correctly. Wrong cells were highlighted.";
-		checkResponse.wrong.map(({ i, j }) => {
-			const cell = document.getElementById("cellInput-" + i + "-" + j);
-			cell.classList.add("highlightCell");
+			"Sorry, you didn't solve the sudoku correctly. Cells with wrong values were highlighted.";
+		checkResponse.wrong.map(({ i, j, value }) => {
+			if (value !== 0) {
+				const cell = document.getElementById(
+					"cellInput-" + i + "-" + j
+				);
+				cell.classList.add("highlightCell");
+			}
 		});
 	}
 };
@@ -89,8 +93,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 				const cellInput = document.createElement("input");
 				cellInput.id = "cellInput-" + i + "-" + j;
 				cellInput.classList.add("cell");
-				cellInput.min = 1;
-				cellInput.max = 9;
+				// cellInput.min = 1;
+				// cellInput.max = 9;
+				cellInput.type = "tel";
 				cellInput.disabled = cell !== 0;
 				if (cell !== 0) cellInput.classList.add("preDefinedCell");
 				cellInput.value = cell !== 0 ? cell : "";

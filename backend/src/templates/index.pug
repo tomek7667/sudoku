@@ -9,10 +9,10 @@ if (user)
     a(href="/in-progress") in progress
     a(href="/profile") profile
     br
-    span logged in as 
-    b #{user.name}
-    span &nbsp;stars:
-    b &nbsp;#{user.stars}
+    p logged in as 
+        b #{user.name}
+        span &nbsp;stars:
+        b &nbsp;#{user.stars}
     br
     a(href="/logout") logout
 else

@@ -12,3 +12,9 @@
 .sudoku-list-item:hover {
     background-color: #ccc;
 }
+
+@media only screen and (max-device-width: 600px) {
+    .sudoku-list-item {
+        font-size: 7vw;
+    }
+}

@@ -6,6 +6,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="num
     box-shadow: none;
     outline: none;
     margin-bottom: 5px;
+    font-size: 2vw;
 }
 
 button, input[type="submit"] {
@@ -19,6 +20,7 @@ button, input[type="submit"] {
     margin-bottom: 5px;
     transition: 0.3s;
     margin-right: 5px;
+    font-size: 2vw
 }
 
 input[type="submit"]:hover {
@@ -31,26 +33,29 @@ button:hover {
 
 a {
     margin-right: 5px;
+    font-size: 2vw;
 }
 
-@media screen and (max-width: 600px) {
+h1 {
+    font-size: 10vw;
+}
+
+p {
+    font-size: 4vw;
+}
+
+/* for mobile the a tag and buttons must be 7vw font size */
+
+@media only screen and (max-device-width: 600px) {
     a {
-        font-size: 1.5em;
+        font-size: 7vw;
+        display: inline;
     }
 
     button, input[type="submit"] {
-        font-size: 1.5em;
+        font-size: 7vw;
     }
-
     input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
-        font-size: 1.5em;
-    }
-
-    h1 {
-        font-size: 2em;
-    }
-
-    p {
-        font-size: 1.5em;
+        font-size: 7vw;
     }
 }

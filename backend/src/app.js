@@ -90,6 +90,6 @@ app.get("/", (req, res) => {
 	return res.render("index", { user: user?.toJSON() });
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
 	console.log(`Example app listening at http://localhost:${port}`);
 });

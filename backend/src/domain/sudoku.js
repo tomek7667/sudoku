@@ -130,7 +130,7 @@ export class Sudoku {
 		for (let i = 0; i < 9; i++) {
 			for (let j = 0; j < 9; j++) {
 				if (trial[i][j] !== this.solution[i][j]) {
-					wrong.push({ i, j });
+					wrong.push({ i, j, value: trial[i][j] });
 					success = false;
 				}
 			}
