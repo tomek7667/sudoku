@@ -7,7 +7,10 @@ canvas(id="fireworkBox" class="fireworkBox")
 p(id="sudokuName")
 div(id="checkResult") Try to solve the puzzle!
 br
-div(id="sudokuBox" class="sudokuBox")
+div(class="sudokuOverlay")
+  div(class="overlay-element vertical")
+  div(class="overlay-element horizontal")
+  div(id="sudokuBox" class="sudokuBox")
 button(id="refreshButton") New Sudoku
 button(id="solveButton") Solve
 if (user)

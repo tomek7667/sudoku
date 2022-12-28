@@ -1,5 +1,5 @@
 .sudokuBox {
-    width: 100%;
+    width: calc(100% - 25px);
     border-radius: 5px;
     border-collapse: collapse;
     font-size: 20px;
@@ -13,7 +13,42 @@
     padding-top: 5px;
     margin-left: auto;
     margin-right: auto;
+    overflow: auto;
 }
+
+.sudokuOverlay {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    left:20px;
+    --border-style: 3px solid rgb(102, 102, 102);
+}
+
+.overlay-element {
+    position: absolute;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.sudokuOverlay .vertical {
+    border-left: var(--border-style);
+    border-right: var(--border-style);
+    left: calc(33.33333333333333% - (3*5px) + 4px);
+    right: calc(33.33333333333333% + (3*5px) + 2px);
+    top: 0;
+    bottom: 0;
+}
+
+.sudokuOverlay .horizontal {
+    border-top: var(--border-style);
+    border-bottom: var(--border-style);
+    top: calc(33.33333333333333% + 0.5px);
+    bottom: calc(33.33333333333333% - 0.5px);
+    left: 0;
+    right: 0;
+    width: calc(100% - 25px);
+}
+
 
 .row {
     width: 100%;
@@ -21,6 +56,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: nowrap;
     margin-bottom: 5px;
 }
 
