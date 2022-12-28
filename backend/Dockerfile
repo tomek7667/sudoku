@@ -1,11 +1,11 @@
 FROM node:latest
 
-RUN npm install -g yarn
+RUN npm install -g yarn --force
 
 COPY src/ /app/src/
 WORKDIR /app/src/
 
 RUN yarn install
-RUN yarn start
+CMD yarn start
 
 EXPOSE 3000
