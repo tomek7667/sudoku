@@ -21,7 +21,7 @@
     overflow: hidden;
     position: relative;
     left:20px;
-    --border-style: 3px solid rgb(102, 102, 102);
+    --border-style: 15px solid rgb(102, 102, 102);
 }
 
 .overlay-element {

@@ -5,3 +5,5 @@ services:
     build: .
     ports:
       - "13211:3000"
+    volumes:
+      - ./src/db.sqlite:/app/src/db.sqlite
