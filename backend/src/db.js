@@ -331,3 +331,23 @@ export const getInProgressSudokusNames = async (userId, offset, limit) => {
 		);
 	});
 };
+
+export const getScoreboard = (offset, limit) => {
+	return new Promise((resolve, reject) => {
+		db.all(
+			"SELECT DISTINCT users.* FROM users INNER JOIN sudokus_users ON users.id = sudokus_users.user_id WHERE sudokus_users.solved = 1 GROUP BY sudokus_users.user_id ORDER BY solved DESC LIMIT ? OFFSET ?",
+			[limit, offset],
+			async (err, rows) => {
+				if (err) {
+					return reject(err);
+				}
+				const users = await Promise.all(
+					rows.map(async (row) => {
+						return await serializeUser(row);
+					})
+				);
+				return resolve(users);
+			}
+		);
+	});
+};

@@ -6,6 +6,7 @@ import { __express as pug } from "pug";
 import { getUser } from "./db.js";
 import { usersRouter } from "./routers/users.js";
 import { sudokusRouter } from "./routers/sudoku.js";
+import { scoreboardRouter } from "./routers/scoreboard.js";
 dotenv.config();
 
 const port = 3000;
@@ -36,6 +37,7 @@ app.use(serializeUser);
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/sudokus", sudokusRouter);
+app.use("/api/v1/scoreboard", scoreboardRouter);
 
 app.get("/login", (req, res) => {
 	const { user } = req;
@@ -83,6 +85,11 @@ app.get("/in-progress", (req, res) => {
 	const { user } = req;
 	if (!user) return res.redirect("/login");
 	return res.render("in-progress", { user: user?.toJSON() });
+});
+
+app.get("/scores", (req, res) => {
+	const { user } = req;
+	return res.render("scores", { user: user?.toJSON() });
 });
 
 app.get("/", (req, res) => {

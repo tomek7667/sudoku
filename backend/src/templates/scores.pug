@@ -1,0 +1,12 @@
+include common/header.pug
+script(src="scoreboard/scoreboard.js" defer)
+link(rel="stylesheet", href="scoreboard/scoreboard.css")
+h1 scoreboard 
+table(id="scoreboard")
+    tr
+        th place
+        th username
+        th stars
+button(id="loadMore") Load more
+br
+a(href="/") back
